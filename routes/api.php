@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\HelloController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -29,3 +30,11 @@ Route::delete('/tasks/{id}', [TaskController::class, 'destroy']);
 
 // Apply all above routes' function on the Task resource
 Route::apiResource('tasks', TaskController::class);
+Route::get('/user/{id}/tasks', [UserController::class, 'getUserTasks']);
+Route::get('/tasks/{id}/user', [TaskController::class, 'getTaskCreator']);
+
+// Profile related routes
+Route::apiResource('profile', ProfileController::class);
+
+// User related routes
+Route::get('/user/{id}/profile', [UserController::class, 'getProfile']);

@@ -3,11 +3,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Task extends Model
+class Profile extends Model
 {
-    // protected $fillable = ['title', 'description', 'priority'];
+    // protected $fillable = ['phone', 'user_id'];
     protected $guarded = ['id'];
-    protected $hidden  = ['created_at', 'updated_at'];
 
     public function user()
     {

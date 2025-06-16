@@ -55,4 +55,12 @@ class TaskController extends Controller
 
         return response()->json($task, 200);
     }
+
+    public function getTaskCreator(string $id)
+    {
+        $task = Task::findOrFail($id);
+
+        $user = $task->user;
+        return response()->json($user, 200);
+    }
 }
