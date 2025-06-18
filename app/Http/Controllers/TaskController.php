@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AddCategoriesToTaskRequest;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Task;
@@ -15,6 +16,37 @@ class TaskController extends Controller
         $tasks = Task::all();
 
         return response()->json($tasks, 200);
+    }
+
+    /**
+     * Add categories to task
+     */
+    public function addCategoriesToTask(AddCategoriesToTaskRequest $request, string $taskId)
+    {
+        $task = Task::findOrFail($taskId);
+        // $task->categories()->attach($request->validated()['categories']);
+        // $task->categories()->attach($request->input('category_id'));
+        // $task->categories()->attach($request->category_id);
+        // $task->categories()->attach($request->validated()['category_id']);
+
+        // More safe
+        // $task->categories()->attach($request->input('category_id'));
+
+        // Prevent duplicating categories for the same task
+        $task->categories()->syncWithoutDetaching($request->input('category_id'));
+
+        return response()->json(['message' => 'Successfully added categories to task.'], 201);
+    }
+
+    /**
+     * Get categories of a specific task
+     */
+    public function getCategoriesOfTask($taskId)
+    {
+        $task       = Task::findOrFail($taskId);
+        $categories = $task->categories;
+
+        return response()->json($categories, 200);
     }
 
     /**

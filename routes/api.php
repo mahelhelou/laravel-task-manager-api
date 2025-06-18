@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HelloController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaskController;
@@ -32,9 +33,16 @@ Route::delete('/tasks/{id}', [TaskController::class, 'destroy']);
 Route::apiResource('tasks', TaskController::class);
 Route::get('/user/{id}/tasks', [UserController::class, 'getUserTasks']);
 Route::get('/tasks/{id}/user', [TaskController::class, 'getTaskCreator']);
+Route::post('/tasks/{id}/categories', [TaskController::class, 'addCategoriesToTask']);
+Route::get('/tasks/{id}/categories', [TaskController::class, 'getCategoriesOfTask']);
 
 // Profile related routes
 Route::apiResource('profile', ProfileController::class);
+
+// Category related routes
+Route::apiResource('categories', CategoryController::class);
+Route::post('/categories/{id}/tasks', [CategoryController::class, 'addTasksToCategory']);
+Route::get('/categories/{id}/tasks', [CategoryController::class, 'getTasksOfCategory']);
 
 // User related routes
 Route::get('/user/{id}/profile', [UserController::class, 'getProfile']);
