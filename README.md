@@ -28,6 +28,16 @@ values
 ('Entertainment'),
 ('Health'),
 ('Cocking');
+
+-- Dumping category_task table
+INSERT INTO category_task(task_id, category_id)
+VALUES(1, 3),
+(1, 4),
+(1, 5),
+(4, 2),
+(3, 1),
+(3, 3),
+(3, 5);
 ```
 
 ## Reports (SQLs)

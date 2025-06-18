@@ -2,9 +2,36 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    /**
+     * Register a new user
+     */
+    public function register(Request $request)
+    {
+        // 1. Validate the request inputs (name, email, password)
+        $request->validate([
+            'name'     => 'required|string|max:40',
+            'email'    => 'required|string|email|max:40|unique:users,email',
+            'password' => 'required|min:8|confirmed',
+        ]);
+
+        // 2. Create the request in the database
+        $user = User::create([
+            'name'     => $request->name,
+            'email'    => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+
+        // 3. Show a success/failure message
+        return response()->json([
+            'message' => "Welcome {$user['name']}! You have registered successfully.",
+            'user'    => $user,
+        ], 201);
+    }
 
     public function getProfile(string $id)
     {
