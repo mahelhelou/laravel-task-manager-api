@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -30,6 +31,34 @@ class UserController extends Controller
         return response()->json([
             'message' => "Welcome {$user['name']}! You have registered successfully.",
             'user'    => $user,
+        ], 201);
+    }
+
+    /**
+     * Login user to the app
+     */
+    public function login(Request $request)
+    {
+        // 1. Validate the request inputs
+        $request->validate([
+            'email'    => 'required',
+            'password' => 'required',
+        ]);
+
+        // 2. Try to login the user
+        if (! Auth::attempt($request->only('email', 'password'))) {
+            return response()->json(['message' => 'Invalid email or password.'], 401);
+        }
+
+        $user = User::where('email', $request->email)->firstOrFail();
+        // You have to import HasApiTokens in User.php (Model)
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        // 3. Show success/failure message
+        return response()->json([
+            'message' => 'Logged in successfully',
+            'user'    => $user,
+            'token'   => $token,
         ], 201);
     }
 

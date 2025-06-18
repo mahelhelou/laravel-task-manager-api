@@ -46,4 +46,5 @@ Route::get('/categories/{id}/tasks', [CategoryController::class, 'getTasksOfCate
 
 // User related routes
 // Route::get('/user/{id}/profile', [UserController::class, 'getProfile']);
-Route::post('/users', [UserController::class, 'register']);
+Route::post('/users/register', [UserController::class, 'register']);
+Route::post('/users/login', [UserController::class, 'login']);
