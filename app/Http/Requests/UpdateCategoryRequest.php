@@ -22,6 +22,7 @@ class UpdateCategoryRequest extends FormRequest
     {
         return [
             'name' => 'sometimes|required|string',
+            // 'user_id' => 'sometimes|required|exists:users,id',
         ];
     }
 }

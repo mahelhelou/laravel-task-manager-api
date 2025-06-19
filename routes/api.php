@@ -29,23 +29,35 @@ Route::get('/tasks/{id}', [TaskController::class, 'show']);
 Route::delete('/tasks/{id}', [TaskController::class, 'destroy']);
 */
 
+Route::post('/users/register', [UserController::class, 'register']);
+Route::post('/users/login', [UserController::class, 'login']);
+
+Route::middleware('auth:sanctum')->group(function () {
 // Apply all above routes' function on the Task resource
-Route::apiResource('tasks', TaskController::class);
-Route::get('/user/{id}/tasks', [UserController::class, 'getUserTasks']);
-Route::get('/tasks/{id}/user', [TaskController::class, 'getTaskCreator']);
-Route::post('/tasks/{id}/categories', [TaskController::class, 'addCategoriesToTask']);
-Route::get('/tasks/{id}/categories', [TaskController::class, 'getCategoriesOfTask']);
+    // Route::apiResource('tasks', TaskController::class)->middleware('auth:sanctum');
+    Route::apiResource('tasks', TaskController::class);
+    Route::get('/user/{id}/tasks', [UserController::class, 'getUserTasks']);
+    Route::get('/tasks/{id}/user', [TaskController::class, 'getTaskCreator']);
+    Route::post('/tasks/{id}/categories', [TaskController::class, 'addCategoriesToTask']);
+    Route::get('/tasks/{id}/categories', [TaskController::class, 'getCategoriesOfTask']);
 
 // Profile related routes
-Route::apiResource('profile', ProfileController::class);
+    Route::apiResource('profile', ProfileController::class);
 
 // Category related routes
-Route::apiResource('categories', CategoryController::class);
-Route::post('/categories/{id}/tasks', [CategoryController::class, 'addTasksToCategory']);
-Route::get('/categories/{id}/tasks', [CategoryController::class, 'getTasksOfCategory']);
+    Route::apiResource('categories', CategoryController::class);
+    Route::post('/categories/{id}/tasks', [CategoryController::class, 'addTasksToCategory']);
+    Route::get('/categories/{id}/tasks', [CategoryController::class, 'getTasksOfCategory']);
+
+// Route::prefix('categories')->group(function () {
+//     Route::apiResource('/', CategoryController::class);
+//     // Route::get('/{id}', [CategoryController::class, 'show']);
+//     Route::post('/{id}/tasks', [CategoryController::class, 'addTasksToCategory']);
+//     Route::get('/{id}/tasks', [CategoryController::class, 'getTasksOfCategory']);
+// });
 
 // User related routes
 // Route::get('/user/{id}/profile', [UserController::class, 'getProfile']);
-Route::post('/users/register', [UserController::class, 'register']);
-Route::post('/users/login', [UserController::class, 'login']);
-Route::post('/users/logout', [UserController::class, 'logout'])->middleware('auth:sanctum');
+    // Route::post('/users/logout', [UserController::class, 'logout'])->middleware('auth:sanctum');
+    Route::post('/users/logout', [UserController::class, 'logout']);
+});

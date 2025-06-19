@@ -3,8 +3,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AddTasksToCategoryRequest;
 use App\Http\Requests\StoreCategoryRequest;
+use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
@@ -13,7 +14,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
+                                                // $categories = Category::all(); // Returns all users' categories
+        $categories = Auth::user()->categories; // Model's method
 
         return response()->json($categories, 200);
     }
@@ -47,7 +49,10 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request)
     {
-        $category = Category::create($request->validated());
+        $incomingFields            = $request->validated();
+        $incomingFields['user_id'] = Auth::user()->id;
+
+        $category = Category::create($incomingFields);
 
         return response()->json($category, 201);
     }
@@ -65,9 +70,16 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateCategoryRequest $request, string $id)
     {
+        $user_id  = Auth::user()->id;
         $category = Category::findOrFail($id);
+
+        // Authorized (Category ownwer) ? Update category : Show "Unauthorized" message
+        if ($category->user_id != $user_id) {
+            return response()->json(['message' => 'Unauthorized.'], 200);
+        }
+
         $category->update($request->validated());
 
         return response()->json($category, 200);

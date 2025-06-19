@@ -5,6 +5,7 @@ use App\Http\Requests\AddCategoriesToTaskRequest;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Task;
+use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
@@ -13,7 +14,8 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $tasks = Task::all();
+                                      // $tasks = Task::all(); // Will return all users' tasks (Not wanted and insecure and lack of privacy)
+        $tasks = Auth::user()->tasks; // From User.php (Model relationships)
 
         return response()->json($tasks, 200);
     }
@@ -54,7 +56,13 @@ class TaskController extends Controller
      */
     public function store(StoreTaskRequest $request)
     {
-        $task = Task::create($request->validated());
+        // Let the user logged in to create tasks directly (Remove the field from StoreTaskRequest)
+        $user_id                   = Auth::user()->id;
+        $incomingFields            = $request->validated();
+        $incomingFields['user_id'] = $user_id;
+        // $request->validated()['user_id'] = $user_id;
+        $task = Task::create($incomingFields);
+
         return response()->json($task, 201);
     }
 
@@ -72,8 +80,16 @@ class TaskController extends Controller
      */
     public function update(UpdateTaskRequest $request, string $id)
     {
-        $task = Task::findOrFail($id);
+        $user_id = Auth::user()->id;
+        $task    = Task::findOrFail($id);
+
+        // Authorized ? Update task : show "Unauthenticated" message
+        if ($task->user_id != $user_id) {
+            return response()->json(['message' => 'Unauthorized.'], 200);
+        }
+
         $task->update($request->validated());
+
         return response()->json($task, 200);
     }
 

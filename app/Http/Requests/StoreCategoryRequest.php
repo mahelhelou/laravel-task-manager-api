@@ -22,6 +22,7 @@ class StoreCategoryRequest extends FormRequest
     {
         return [
             'name' => 'required|string',
+            // 'user_id' => 'required|exists:user,id',
         ];
     }
 }

@@ -24,7 +24,7 @@ class UpdateTaskRequest extends FormRequest
             'title'       => 'sometimes|required|string|max:60',
             'description' => 'sometimes|nullable|string',
             'priority'    => 'sometimes|required|integer|min:1|max:5',
-            'user_id'     => 'sometimes|required|exists:users,id',
+            // 'user_id'     => 'sometimes|required|exists:users,id', // Instead, we use Auth
         ];
     }
 

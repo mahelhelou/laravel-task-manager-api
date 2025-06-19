@@ -12,16 +12,17 @@ class CategorySeeder extends Seeder
     public function run(): void
     {
         $categories = [
-            'Personal',
-            'Work',
-            'Family',
-            'Soul',
-            'Body',
-            'Mind',
+            ['name' => 'Personal', 'user_id' => 1],
+            ['name' => 'Work', 'user_id' => 1],
+            ['name' => 'Life', 'user_id' => 2],
+            ['name' => 'Health', 'user_id' => 2],
         ];
 
         foreach ($categories as $category) {
-            Category::create(['name' => $category]);
+            Category::create([
+                'name'    => $category['name'],
+                'user_id' => $category['user_id'],
+            ]);
         }
     }
 }
