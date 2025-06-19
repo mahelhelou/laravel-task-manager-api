@@ -48,3 +48,4 @@ Route::get('/categories/{id}/tasks', [CategoryController::class, 'getTasksOfCate
 // Route::get('/user/{id}/profile', [UserController::class, 'getProfile']);
 Route::post('/users/register', [UserController::class, 'register']);
 Route::post('/users/login', [UserController::class, 'login']);
+Route::post('/users/logout', [UserController::class, 'logout'])->middleware('auth:sanctum');

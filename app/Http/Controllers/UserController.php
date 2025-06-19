@@ -62,6 +62,16 @@ class UserController extends Controller
         ], 201);
     }
 
+    /**
+     * Logout the user from the app
+     */
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json(['message' => 'Logged out successfully.'], 200);
+    }
+
     public function getProfile(string $id)
     {
         $user = User::findOrFail($id);
