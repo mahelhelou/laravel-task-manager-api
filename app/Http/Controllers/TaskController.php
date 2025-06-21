@@ -10,6 +10,16 @@ use Illuminate\Support\Facades\Auth;
 class TaskController extends Controller
 {
     /**
+     * Display a list of all users tasks (Admin)
+     */
+    public function getAllTasks()
+    {
+        $tasks = Task::all();
+
+        return response()->json($tasks, 200);
+    }
+
+    /**
      * Display a listing of the resource.
      */
     public function index()

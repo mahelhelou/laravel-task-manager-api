@@ -14,17 +14,18 @@ class UserSeeder extends Seeder
     {
         $users = [
             [
-                'name'     => 'Mahmoud Elhelou',
-                'email'    => 'mahmoud@example.com',
-                'password' => Hash::make('password'), // 🔐 never use plain text in real projects
+                'name'     => 'admin',
+                'email'    => 'admin@example.com',
+                'isAdmin'  => 1,
+                'password' => '123',
             ],
             [
-                'name'     => 'Sara Ali',
+                'name'     => 'sara',
                 'email'    => 'sara@example.com',
                 'password' => Hash::make('password'),
             ],
             [
-                'name'     => 'Tariq Nassar',
+                'name'     => 'tariq',
                 'email'    => 'tariq@example.com',
                 'password' => Hash::make('password'),
             ],
@@ -34,10 +35,12 @@ class UserSeeder extends Seeder
             User::create([
                 'name'       => $user['name'],
                 'email'      => $user['email'],
+                'isAdmin'    => $user['isAdmin'] ?? 0,
                 'password'   => $user['password'],
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
         }
+
     }
 }

@@ -1,5 +1,10 @@
 # Documentation
 
+## Todos
+- Create a middleware
+- Get all users tasks (Admin user)
+    - Update database (Migration file)
+
 ## SQLs
 
 ```sql

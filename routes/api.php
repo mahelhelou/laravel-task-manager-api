@@ -36,6 +36,9 @@ Route::middleware('auth:sanctum')->group(function () {
 // Apply all above routes' function on the Task resource
     // Route::apiResource('tasks', TaskController::class)->middleware('auth:sanctum');
     Route::apiResource('tasks', TaskController::class);
+
+    // Pay attention to this /task NOT /tasks
+    Route::get('task/all', [TaskController::class, 'getAllTasks'])->middleware('mustBeAnAdmin');
     Route::get('/user/{id}/tasks', [UserController::class, 'getUserTasks']);
     Route::get('/tasks/{id}/user', [TaskController::class, 'getTaskCreator']);
     Route::post('/tasks/{id}/categories', [TaskController::class, 'addCategoriesToTask']);
