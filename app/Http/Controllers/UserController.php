@@ -17,7 +17,7 @@ class UserController extends Controller
         $request->validate([
             'name'     => 'required|string|max:40',
             'email'    => 'required|string|email|max:40|unique:users,email',
-            'password' => 'required|min:8|confirmed',
+            'password' => 'required|min:8|confirmed', // You should include 'password_confirmation' field in the request
         ]);
 
         // 2. Create the request in the database
@@ -41,18 +41,19 @@ class UserController extends Controller
     {
         // 1. Validate the request inputs
         $request->validate([
-            'email'    => 'required',
+            'email'    => 'required|exists:users,email',
             'password' => 'required',
         ]);
 
-        // 2. Try to login the user
+        // 2. Try to login the user with the given email and password
         if (! Auth::attempt($request->only('email', 'password'))) {
             return response()->json(['message' => 'Invalid email or password.'], 401);
         }
 
         $user = User::where('email', $request->email)->firstOrFail();
         // You have to import HasApiTokens in User.php (Model)
-        $token = $user->createToken('auth_token')->plainTextToken;
+        // $token = $user->createToken('auth_token')->plainTextToken;
+        $token = $user->createToken($user->name . '_token')->plainTextToken;
 
         // 3. Show success/failure message
         return response()->json([
@@ -67,7 +68,8 @@ class UserController extends Controller
      */
     public function logout(Request $request)
     {
-        $request->user()->currentAccessToken()->delete();
+        // $request->user()->currentAccessToken()->delete();
+        $request->user()->tokens()->delete();
 
         return response()->json(['message' => 'Logged out successfully.'], 200);
     }

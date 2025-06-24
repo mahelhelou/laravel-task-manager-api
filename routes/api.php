@@ -29,6 +29,7 @@ Route::get('/tasks/{id}', [TaskController::class, 'show']);
 Route::delete('/tasks/{id}', [TaskController::class, 'destroy']);
 */
 
+// You can create AuthController to hold these routes
 Route::post('/users/register', [UserController::class, 'register']);
 Route::post('/users/login', [UserController::class, 'login']);
 
